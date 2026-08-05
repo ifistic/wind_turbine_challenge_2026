@@ -1,0 +1,31 @@
+# requirements for the project 
+# Apache Spark
+pyspark==4.0.0
+
+# Data manipulation
+pandas==2.3.1
+numpy==2.3.2
+pyarrow==21.0.0
+# PostgreSQL JDBC Support
+psycopg2-binary==2.9.10
+
+# Environment Variables
+python-dotenv==1.1.1
+
+# Logging
+loguru==0.7.3
+
+# Testing
+pytest==8.4.1
+pytest-cov==6.2.1
+
+# Code Quality
+black==25.1.0
+isort==6.0.1
+flake8==7.3.0
+
+# Type Checking
+mypy==1.17.1
+# java for spark
+# please do sudo apt update
+# Then pip install openjdk-17-jdk
