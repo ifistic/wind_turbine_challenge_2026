@@ -1,0 +1,34 @@
+# Virtual environment
+project_venv/
+venv/
+*.egg-info/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables / secrets
+.env
+
+# Generated data / pipeline output
+data/
+raw_data/
+logs/
+artifacts/
+output/
+
+# JDBC driver jars (large binary, environment-specific)
+jars/
+
+# Spark
+*.log
+metastore_db/
+derby.log
+
+# OS junk
+.DS_Store
+__MACOSX/
+
+# IDE
+.vscode/
+.idea/
