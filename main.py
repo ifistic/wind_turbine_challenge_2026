@@ -11,7 +11,7 @@ Pipeline:
 main.py
 Entry point for the Wind Turbine Data Pipeline.
 Pipeline:
-Raw CSV -> Bronze -> Silver -> Gold
+Raw CSV to Bronze to Silver to Gold
 """
 from pyspark.sql import SparkSession
 from src.utils.config import CONFIG
@@ -50,18 +50,18 @@ def main() -> None:
         # ======================================================
         # RAW
         # ======================================================
-        print("\nStep 1: Reading raw CSV files...")
+        print("\n Reading raw CSV files...")
 
         raw_df = ingest_raw_data(spark)
 
         print(f"Raw records: {raw_df.count()}")
 
-        raw_df.show(5, truncate=False)
+        raw_df.show(1, truncate=False)
 
         # ======================================================
         # BRONZE
         # ======================================================
-        print("\nStep 2: Creating Bronze layer...")
+        print("\n Creating Bronze layer...")
 
         bronze_df = create_bronze_layer(raw_df)
 
@@ -70,7 +70,7 @@ def main() -> None:
         # ======================================================
         # SILVER
         # ======================================================
-        print("\nStep 3: Creating Silver layer...")
+        print("\n Creating Silver layer ( Processed Data)")
 
         silver_df = create_silver_layer(bronze_df)
 
@@ -79,7 +79,7 @@ def main() -> None:
         # ======================================================
         # GOLD
         # ======================================================
-        print("\nStep 4: Creating Gold layer...")
+        print("\n Creating Gold layer")
 
         summary_df, anomaly_df = create_gold_layer(
             silver_df
@@ -93,7 +93,7 @@ def main() -> None:
 
         summary_df.orderBy(
             "turbine_id"
-        ).show(
+        ).show(2,
             truncate=False
         )
 
@@ -104,7 +104,7 @@ def main() -> None:
             "turbine_id",
             "timestamp"
         ).show(
-            50,
+            2,
             truncate=False
         )
 

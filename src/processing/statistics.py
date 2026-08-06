@@ -12,14 +12,11 @@ def calculate_summary_statistics(
 ) -> DataFrame:
     """
     Calculate power-output statistics for every turbine, over a
-    given time period (default: 24 hours / 1 day).
-
-    Args:
+    given time period (default: 24 hours / 1 day). Args:
         df: Turbine readings DataFrame (must have `timestamp`
             and `turbine_id` columns).
         time_period: Spark tumbling-window duration string,
             e.g. "1 day", "24 hours", "1 hour".
-
     Returns:
         DataFrame with one row per turbine per time window,
         containing min/max/avg/stddev power output and the

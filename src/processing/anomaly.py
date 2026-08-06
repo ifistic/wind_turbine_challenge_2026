@@ -3,10 +3,6 @@ anomaly.py
 
 Detect anomalous turbine power-output readings.
 
-A reading is considered anomalous when its power output is
-more than the configured number of standard deviations from
-the mean power output for that turbine, calculated over the
-same time period (e.g. 24 hours) used for summary statistics.
 """
 
 from pyspark.sql import DataFrame
@@ -23,32 +19,6 @@ def detect_anomalies(
     Detect power-output anomalies for each turbine, within each
     time window.
 
-    A power-output reading is anomalous when, within its own
-    turbine + time-window group:
-
-        power_output < mean - (threshold * stddev)
-
-    OR
-
-        power_output > mean + (threshold * stddev)
-
-    By default:
-
-        threshold = CONFIG.ANOMALY_STD_THRESHOLD (2.0)
-        time_period = "1 day"
-
-    Args:
-        df:
-            Cleaned Silver-layer turbine DataFrame. Must have
-            `timestamp`, `turbine_id`, `power_output` columns.
-        time_period:
-            Spark tumbling-window duration string, e.g. "1 day",
-            "24 hours", "1 hour". Should match the window used
-            in calculate_summary_statistics() for consistency.
-
-    Returns:
-        DataFrame containing only anomalous readings, with the
-        per-window mean/stddev/bounds attached for context.
     """
 
     # ----------------------------------------------------------

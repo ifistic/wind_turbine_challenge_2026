@@ -60,22 +60,9 @@ def create_bronze_layer(raw_df: DataFrame) -> DataFrame:
     Create the Bronze layer.
 
     The Bronze layer:
-      - copies the original raw CSV files verbatim into
-        CONFIG.BRONZE_DIR (untouched, for lineage/auditing)
-      - adds ingestion metadata to the DataFrame (no column
-        renaming/standardizing — Bronze preserves the raw schema)
-
-    Args:
-        raw_df: Raw PySpark DataFrame (from ingest_raw_data).
-
-    Returns:
-        Bronze PySpark DataFrame: raw schema + ingestion metadata
-        columns (e.g. ingestion timestamp, source file).
+      - copies the original raw  from download dir to bronze layer
     """
 
-    # Ensure the source zip has been unzipped into raw_data/ before
-    # landing files into Bronze — reuses ingestion.py's extraction
-    # logic rather than duplicating it here.
     extract_raw_data()
 
     raw_dir = Path(CONFIG.RAW_DIR)
@@ -85,10 +72,7 @@ def create_bronze_layer(raw_df: DataFrame) -> DataFrame:
 
     bronze_df = add_ingestion_metadata(raw_df)
 
-    # Drop source_file — it's been consistently empty (a known
-    # bug in add_ingestion_metadata) and adds no value in its
-    # current broken state. Dropped here at the source so it
-    # never propagates into Silver, Gold, Parquet, or the DB.
+    # Drop source_file 
     bronze_df = bronze_df.drop("source_file")
 
     return bronze_df

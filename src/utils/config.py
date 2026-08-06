@@ -46,7 +46,7 @@ class Config:
     # or transformation/anomaly-detection module — placeholders
     # based on typical onshore utility-scale turbine ranges.
     # ==========================================================
-    MIN_WIND_SPEED: float = 0.0        # m/s — below this, turbine can't generate
+    MIN_WIND_SPEED: float = 0.0        #  below this, turbine can't generate
     MAX_WIND_SPEED: float = 25.0       # m/s — cut-out speed, turbine shuts down
     RATED_CAPACITY_MW: float = 2.5     # MW — nameplate capacity per turbine
     MIN_POWER_MW: float = 0.0          # MW — floor for valid power output
@@ -54,8 +54,7 @@ class Config:
     # ==========================================================
     # Anomaly detection
     # Per spec: anomalies are readings outside 2 standard
-    # deviations from the mean, over the same time period as
-    # the summary statistics window.
+    
     # ==========================================================
     ANOMALY_STD_THRESHOLD: float = 2.0
 
@@ -66,7 +65,7 @@ class Config:
     #   POSTGRES_PORT=5432
     #   POSTGRES_DB=wind_turbine_db
     #   POSTGRES_USER=postgres
-    #   POSTGRES_PASSWORD=yourpassword
+    #   POSTGRES_PASSWORD=postgres
     # ==========================================================
     POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "localhost")
     POSTGRES_PORT: str = os.getenv("POSTGRES_PORT", "5432")

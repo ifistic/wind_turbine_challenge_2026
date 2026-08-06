@@ -15,10 +15,7 @@ def find_duplicates(
     keys: list = None,
 ) -> DataFrame:
     """
-    Show rows that share the same turbine_id/timestamp.
-
-    Handy for checking what remove_duplicates() is about to
-    drop before it drops it.
+     checking and removing_duplicates before it drops it.
     """
 
     if keys is None:
@@ -34,7 +31,7 @@ def find_duplicates(
         .orderBy(*keys)
     )
 
-    dupes.show(5, truncate=False)
+    dupes.show(1, truncate=False)
 
     return dupes
 
@@ -43,9 +40,7 @@ def remove_duplicates(
     df: DataFrame,
 ) -> DataFrame:
     """
-    Remove duplicate turbine readings.
-
-    A turbine should have one reading for a given timestamp.
+    Remove duplicate turbine readings. and  a turbine should have one reading for a given timestamp.
     """
 
     return df.dropDuplicates([
@@ -60,8 +55,6 @@ def null_out_invalid_values(
     """
     Replace physically impossible sensor values with null.
 
-    They can then be handled using the same missing-value
-    strategy as sensor failures.
     """
 
     return (
@@ -104,9 +97,7 @@ def impute_missing_values(
 ) -> DataFrame:
     """
     Impute missing numerical sensor values using the
-    mean for each turbine.
-
-    Turbine-level averages are preferable to a global average
+    mean for each turbine. Turbine-level averages are preferable to a global average
     because different turbines may operate differently.
     """
 
@@ -198,9 +189,7 @@ def clean_turbine_data(
     df = impute_missing_values(df)
 
     # Cast to a fixed-precision decimal (4 digits after the point)
-    # so every value displays consistently — e.g. 1.8 becomes
-    # 1.8000 rather than staying 1.8 — while remaining numeric,
-    # so downstream aggregations (avg, stddev, etc.) still work.
+    
     df = (
         df
         .withColumn("wind_speed", F.col("wind_speed").cast(DecimalType(10, 4)))
@@ -209,6 +198,6 @@ def clean_turbine_data(
     )
 
     print("\n--- Sample of cleaned data ---")
-    df.show(150, truncate=False)
+    df.show(1, truncate=False)
 
     return df
