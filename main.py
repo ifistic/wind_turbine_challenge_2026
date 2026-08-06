@@ -98,7 +98,7 @@ def main() -> None:
         )
 
         print("\nDetected Anomalies")
-        print("-" * 60)
+        #print("-" * 40)
 
         anomaly_df.orderBy(
             "turbine_id",
@@ -108,9 +108,9 @@ def main() -> None:
             truncate=False
         )
 
-        print("=" * 60)
+        print("=" * 40)
         print("Pipeline completed successfully.")
-        print("=" * 60)
+        #print("=" * 60)
 
     except Exception as error:
         print("\nPipeline failed!")

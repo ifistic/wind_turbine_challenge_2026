@@ -24,7 +24,7 @@ def create_silver_layer(df: DataFrame) -> DataFrame:
         mode="overwrite",
     )
 
-    write_to_postgres(silver_df, table_name="silver_turbine_readings")
+    write_to_postgres(silver_df, table_name="Processed_data")
 
     silver_df.show(5, truncate=False)
 
