@@ -49,7 +49,7 @@ def write_to_postgres(
     pandas_df.to_sql(
         table_name,
         engine,
-        if_exists="drop",
+        if_exists="replace",
         index=False,
     )
 
