@@ -1,12 +1,9 @@
 """
-Silver layer for the Wind Turbine Data Pipeline.
-
-The Silver layer contains cleaned and validated turbine data.
+Silver layer for the Wind Turbine Data Pipeline.The Silver layer contains cleaned and validated turbine data.
 """
 
-import sqlite3
-
 from pyspark.sql import DataFrame
+from sqlalchemy import create_engine
 
 from src.utils.config import CONFIG
 from src.processing.cleaning import clean_turbine_data
@@ -17,11 +14,6 @@ def create_silver_layer(df: DataFrame) -> DataFrame:
     """
     Transform Bronze data into cleaned Silver data.
 
-    Args:
-        df: Bronze PySpark DataFrame.
-
-    Returns:
-        Cleaned Silver PySpark DataFrame.
     """
 
     silver_df = clean_turbine_data(df)
@@ -32,43 +24,35 @@ def create_silver_layer(df: DataFrame) -> DataFrame:
         mode="overwrite",
     )
 
-    write_to_sqlite(silver_df)
+    write_to_postgres(silver_df, table_name="silver_turbine_readings")
 
     silver_df.show(5, truncate=False)
 
     return silver_df
 
 
-def write_to_sqlite(
+def write_to_postgres(
     df: DataFrame,
-    table_name: str = "Cleaned_turbine_readings",
+    table_name: str,
 ) -> None:
     """
-    Write a DataFrame to the local SQLite database.
+    Write a DataFrame to PostgreSQL.
 
-    Converts the Spark DataFrame to pandas and writes it via
-    Python's built-in sqlite3 module — no external JDBC driver
-    jar required. Suitable for small-to-moderate datasets that
-    comfortably fit in driver memory (collects all rows to the
-    driver via toPandas()).
-
-    Args:
-        df: DataFrame to write.
-        table_name: Destination table name in the SQLite database.
     """
 
-    print(f"\nWriting to SQLite: {CONFIG.SQLITE_DB_PATH} (table: {table_name})")
+    print(f"\nWriting to PostgreSQL: {CONFIG.POSTGRES_DB} (table: {table_name})")
 
     pandas_df = df.toPandas()
 
-    CONFIG.SQLITE_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    engine = create_engine(CONFIG.POSTGRES_URL)
 
-    with sqlite3.connect(CONFIG.SQLITE_DB_PATH) as conn:
-        pandas_df.to_sql(
-            table_name,
-            conn,
-            if_exists="replace",
-            index=False,
-        )
+    pandas_df.to_sql(
+        table_name,
+        engine,
+        if_exists="drop",
+        index=False,
+    )
+
+    engine.dispose()
 
     print(f"Wrote {len(pandas_df)} row(s) to '{table_name}'")

@@ -5,6 +5,7 @@ Reusable data-cleaning transformations.
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
 from pyspark.sql import Window
+from pyspark.sql.types import DecimalType
 
 from src.utils.config import CONFIG
 
@@ -160,7 +161,7 @@ def impute_missing_values(
             "mean_power_output",
         )
     )
-    
+
     return result
 
 
@@ -196,8 +197,18 @@ def clean_turbine_data(
 
     df = impute_missing_values(df)
 
+    # Cast to a fixed-precision decimal (4 digits after the point)
+    # so every value displays consistently — e.g. 1.8 becomes
+    # 1.8000 rather than staying 1.8 — while remaining numeric,
+    # so downstream aggregations (avg, stddev, etc.) still work.
+    df = (
+        df
+        .withColumn("wind_speed", F.col("wind_speed").cast(DecimalType(10, 4)))
+        .withColumn("wind_direction", F.col("wind_direction").cast(DecimalType(10, 4)))
+        .withColumn("power_output", F.col("power_output").cast(DecimalType(10, 4)))
+    )
+
     print("\n--- Sample of cleaned data ---")
-    df.show(1, truncate=False)
-   
+    df.show(150, truncate=False)
 
     return df

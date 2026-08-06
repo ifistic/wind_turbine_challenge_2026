@@ -6,6 +6,7 @@ Central configuration for the Wind Turbine Data Pipeline.
 
 from dataclasses import dataclass
 from pathlib import Path
+import os
 
 from dotenv import load_dotenv
 
@@ -57,6 +58,21 @@ class Config:
     # the summary statistics window.
     # ==========================================================
     ANOMALY_STD_THRESHOLD: float = 2.0
+
+    # ==========================================================
+    # PostgreSQL
+    # Set these in a .env file at your project root, e.g.:
+    #   POSTGRES_HOST=localhost
+    #   POSTGRES_PORT=5432
+    #   POSTGRES_DB=wind_turbine_db
+    #   POSTGRES_USER=postgres
+    #   POSTGRES_PASSWORD=yourpassword
+    # ==========================================================
+    POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "localhost")
+    POSTGRES_PORT: str = os.getenv("POSTGRES_PORT", "5432")
+    POSTGRES_DB: str = os.getenv("POSTGRES_DB", "wind_turbine_db")
+    POSTGRES_USER: str = os.getenv("POSTGRES_USER", "postgres")
+    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "")
 
     @property
     def DATA_DIR(self) -> Path:
@@ -113,6 +129,16 @@ class Config:
         Path to the local SQLite database file.
         """
         return self.DATA_DIR / "wind_turbine.db"
+
+    @property
+    def POSTGRES_URL(self) -> str:
+        """
+        SQLAlchemy connection string for PostgreSQL.
+        """
+        return (
+            f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+            f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
 
 
 # Module-level singleton instance used throughout the pipeline,

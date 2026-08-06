@@ -12,7 +12,7 @@ from pyspark.sql.functions import asc
 from src.utils.config import CONFIG
 from src.processing.anomaly import detect_anomalies
 from src.processing.statistics import calculate_summary_statistics
-from src.pipelines.silver import write_to_sqlite
+from src.pipelines.silver import write_to_postgres
 from src.utils.helpers import write_parquet
 
 
@@ -62,13 +62,13 @@ def create_gold_layer(
         mode="overwrite",
     )
 
-    # Save to SQLite (same local DB used by the Silver layer)
-    write_to_sqlite(
+    # Save to PostgreSQL (same database used by the Silver layer)
+    write_to_postgres(
         summary_df,
         table_name="gold_summary_statistics",
     )
 
-    write_to_sqlite(
+    write_to_postgres(
         anomaly_df.orderBy(asc("turbine_id")),
         table_name="gold_anomalies",
     )

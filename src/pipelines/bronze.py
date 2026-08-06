@@ -85,4 +85,10 @@ def create_bronze_layer(raw_df: DataFrame) -> DataFrame:
 
     bronze_df = add_ingestion_metadata(raw_df)
 
+    # Drop source_file — it's been consistently empty (a known
+    # bug in add_ingestion_metadata) and adds no value in its
+    # current broken state. Dropped here at the source so it
+    # never propagates into Silver, Gold, Parquet, or the DB.
+    bronze_df = bronze_df.drop("source_file")
+
     return bronze_df

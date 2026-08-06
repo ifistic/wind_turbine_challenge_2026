@@ -25,8 +25,8 @@ def add_ingestion_metadata(df: DataFrame) -> DataFrame:
             F.current_timestamp()
         )
         .withColumn(
-            "source_file",
-            F.input_file_name()
+           "source_file",
+           F.input_file_name()
         )
     )
 
