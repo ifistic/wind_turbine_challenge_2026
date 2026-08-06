@@ -1,6 +1,6 @@
 # Wind Turbine Data Pipeline
 
-A PySpark-based medallion architecture (Bronze → Silver → Gold) pipeline that ingests raw wind turbine sensor readings, cleans and validates the data, computes summary statistics and anomaly detection, and stores the results in PostgreSQL for further analysis.
+A PySpark-based medallion architecture (Bronze - Silver - Gold) pipeline that ingests raw wind turbine sensor readings, cleans and validates the data, computes summary statistics and anomaly detection, and stores the results in PostgreSQL for further analysis.
 
 ## Architecture
 
