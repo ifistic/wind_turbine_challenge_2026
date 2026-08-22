@@ -29,5 +29,5 @@ mypy==1.17.1
 # java for spark
 # please do sudo apt update
 # Then pip install openjdk-17-jdk
-psycopg2-binary
+
 sqlalchemy
