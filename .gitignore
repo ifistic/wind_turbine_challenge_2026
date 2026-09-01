@@ -1,3 +1,4 @@
+
 # Virtual environment
 project_venv/
 venv/
@@ -32,3 +33,20 @@ __MACOSX/
 # IDE
 .vscode/
 .idea/
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+project_venv/
+
+# Environment/secrets
+.env
+*.env
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
